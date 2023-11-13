@@ -1,0 +1,90 @@
+import pandas as pd
+import nltk
+from nltk.corpus import stopwords
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns 
+import re 
+
+data = pd.read_csv(r"./Restaurant_Reviews.csv" , sep="\t")
+
+s = data['Review'].str.extract(r'([A-Za-z]+)\s')
+
+#print(s)
+
+
+nltk.download('stopwords')
+stop_words = set(stopwords.words('english'))
+stop_words_string = '|'.join(stop_words) 
+data = data['Review'].str.replace(r'\b(' + stop_words_string + r')\b', '', regex=True)#
+ 
+#print(data)
+
+
+#remove punctuation---------------------------------------------------
+import string
+ 
+def remove_punctuation(text):
+    text = ' '.join(char for char in text if char not in string.punctuation)
+    return text
+ 
+new_data = remove_punctuation(data)
+ 
+#print(new_data)
+
+#i removed [review] to make it work
+data = data.str.lower()
+#print(data)
+
+# #-------------------------------steaming----------------------------------------
+# from nltk.stem import PorterStemmer, LancasterStemmer
+# porter = PorterStemmer()
+# lancaster = LancasterStemmer()
+# stemmed_porter = data.apply(porter.stem)
+# stemmed_lancaster = data.apply(lancaster.stem)
+
+# print(stemmed_porter)
+# print(stemmed_lancaster)
+
+
+
+
+# #limmetization
+# from nltk.stem import WordNetLemmatizer
+
+# wnl = WordNetLemmatizer()
+
+# sentence_words = nltk.word_tokenize(data['Review'])
+
+# punctuations = "?:!.,;"
+# sentence_words = [word for word in sentence_words if word not in punctuations]
+
+# #print("--Word--", "--Lemma--")
+# #for word in sentence_words:
+#  #   print(word, wnl.lemmatize(word, pos="v"))
+    
+
+# #n gram
+
+
+# import nltk
+# from nltk.util import ngrams
+# from sklearn.feature_extraction.text import CountVectorizer
+# from collections import Counter
+# from nltk.collocations import *
+
+# def Create_gram(data,n):
+#     t=" ".join(data)
+#     tokens = t.split()
+#     print([tokens[i:i+n] for i in range(len(tokens)-n+1)])
+#     print("-------------------------------------------------------------------------------------------------------------------")
+#     print([" ".join(tokens[i:i + n]) for i in range(len(tokens) - n + 1)])
+
+    
+# #Create_gram(data,2)
+
+
+# #pos tagging
+# import seaborn as sns
+# nltk.pos_tag(data['Review'].split())
+
