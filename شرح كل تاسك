@@ -1,0 +1,114 @@
+project lines translation
+
+//importing pakages 
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns 
+%matplotlib inline
+
+//reading csv file in data variable
+
+data = pd.read_csv(r"C:\Users\HEBA\Downloads\Restaurant_Reviews.csv.xls" , sep="\t")
+//sep="\t"=.read()
+//readlines() read file as array of characters
+
+r represent raw data it ignores the characters after the \ or you can add after\ another \
+or you can reverse the slash like this
+C:/Users/HEBA/Downloads/Restaurant_Reviews.csv.xls
+-------------------------------------------------
+s = data['Review'].str.extract(r'([A-Za-z]+)\s')
+// capture and group()  words that contains alphabetic characters from a to z or A to Z  ([A-Za-z]+)  and after it space (\s)
+
+data = data['Review'].str.replace(r'\b(' + stop_words_string + r')\b', '', regex=True)
+// bring any word contain stop_words_string except _ and digit and alphabetic
+//re means regular expression //r for treating it as regular expression
+//'\b(' + stop_words_string + r')\b' :replace stop data with spaces
+
+//stop_words = set(stopwords.words('english'))//vocablries in stop words
+stop_words_string = '|'.join(stop_words)
+//joining stop words in my data مفصول بينهم (|) ex:i|we|you
+///stopwords : words that doesnot affect the meaning 
+
+
+
+import string
+def remove_punctuation(text):
+    text = ' '.join(char for char in text if char not in string.punctuation)
+    return text
+
+new_data = remove_punctuation(data)
+
+print(new_data)
+//removing punctuation from our data by looping on our text and return the char that is not a punctuation 
+
+
+/****converting to lower before removing stop words 
+
+/**re.sub(r'!@#$%^&*.\',' ',token):replace these chars by a space in token
+
+
+---------------------------------------------------
+//stemming
+stemmed_porter = data.apply(porter.stem)
+stemmed_lancaster = data.apply(lancaster.stem)
+
+print(stemmed_porter)
+print(stemmed_lancaster)
+//removes suffex letter and return the original word ex:conncetive->connect
+//porter stemmer:based on rule based 50 rule of grammer delete or replace the suffex alphabetic characters,lower faulity level 
+//lancaster stemmer: based in rule based  120 rule indexed by the last letter in suffex until the word len =3 or one voul with two characters
+high faulity leve
+--------------------------------------------
+/lemetization
+//use dictionary to check if the words after removing affixes(suffixes) equal to word in dictionary
+
+wnl = WordNetLemmatizer()
+
+sentence_words = nltk.word_tokenize(data['Review'])
+
+punctuations = "?:!.,;"
+sentence_words = [word for word in sentence_words if word not in punctuations]//return list of tokenz without punctuation
+
+print("--Word--", "--Lemma--")
+for word in sentence_words:
+    print(word, wnl.lemmatize(word, pos="v"))
+//printing word and word after limetization and if the word is noun or verb it returns verb
+
+//we use  for (stem and limitization)  sentmental analysis
+
+------------------------------------------------------------------
+//ngrams:probability using the last history
+
+
+
+def Create_gram(data,n):
+    t=" ".join(data)//convert to paragraph
+    tokens = t.split()//tokinize the paragraph and return with list of tokens
+    print([tokens[i:i+n] for i in range(len(tokens)-n+1)])//lop from 0 to len(tokens)-1 because we use bigram and return with last two tokens if n=2 return list
+    print("-------------------------------------------------------------------------------------------------------------------")
+    print([" ".join(tokens[i:i + n]) for i in range(len(tokens) - n + 1)])//return as one word insted of ["i","am"]--->"i am"
+
+    
+Create_gram(data,2)//bigram
+
+
+//taking data and n:gram = what 1,2,3 or what number of words in history to use there probability
+//we dont use the library way because it contains only bigram or trigram
+-----------------------------------------------------------------------------------
+
+pos tagging//تخصيص التاج المناسب لكل كلمة في الجملة يعني اسم فعل حرف
+//first step in nlp tasks.
+//tagging step: choose tagging set //we choose the type of tag depand on the probability in curpus
+
+
+nltk.pos_tag(data['Review'].split())//split data to tokins and return list of tokend to pos as an input and give him the tag based on the corbusor
+data that he works on
+//tag give the tag for each word //evaluate give the accuricy for each tag 
+
+
+
+
+
+
